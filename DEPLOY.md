@@ -126,6 +126,8 @@ If these rows are missing, re-import `database/schema_shared_hosting.sql` into t
 
 5. **Redeploy updated PHP** — Upload the latest `models/User.php` and `controllers/StudentController.php` from the repo: login now matches **User ID case-insensitively** (`upsa001` = `UPSA001`) and tolerates stray whitespace around stored password hashes.
 
+6. **Logo / assets on Linux hosting** — URLs are now built with **`app_url()`** so `/pictures/logo.jpg` resolves at the domain root. Ensure the folder on the server is exactly **`pictures`** (all lowercase) and contains **`logo.jpg`**; Linux is case-sensitive (`Pictures` ≠ `pictures`).
+
 ---
 
 ## 10. Production hygiene

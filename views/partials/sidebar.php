@@ -1,35 +1,19 @@
 <?php
-// Determine base path for links based on current file location
-$current_path = $_SERVER['PHP_SELF'];
-// Get project root by finding everything before /views/ if it exists, or use / if not
-$project_root = strpos($current_path, '/views/') !== false ? substr($current_path, 0, strpos($current_path, '/views/') + 1) : '/';
+/**
+ * Sidebar — app_url() fixes logo and logout on domain root (e.g. InfinityFree) and in subfolders.
+ */
+require_once __DIR__ . '/../../helpers/functions.php';
 
-// Calculate relative path to project root
-$relative_from_root = ltrim(str_replace($project_root, '', $current_path), '/');
-$depth = substr_count($relative_from_root, '/');
-$to_root = str_repeat('../', $depth);
+$logo_path = app_url('pictures/logo.jpg');
 
-// Ensure $to_root isn't empty if we're inside views/
-if ($depth === 0 && strpos($current_path, '/views/') !== false) {
-    $to_root = '../';
-}
-// Special case: if we are at root level (index.php), to_root should be empty
-if (strpos($current_path, '/views/') === false) {
-    $to_root = '';
-}
-
-// Path for logo (from views/ is ../pictures/, from views/student/ is ../../pictures/)
-$logo_path = $to_root . 'pictures/logo.jpg';
-
-// Path for dashboard (from views/ is student/dashboard.php, from views/student/ is dashboard.php)
 $role_folder = $_SESSION['user_role'] === 'admin' ? 'admin/' : ($_SESSION['user_role'] === 'officer' ? 'officer/' : 'student/');
-$dashboard_link = $to_root . 'views/' . $role_folder . 'dashboard.php';
-$report_link = $to_root . 'views/student/report_incident.php';
-$users_link = $to_root . 'views/admin/users.php';
-$settings_link = $to_root . 'views/change_password.php';
-$logout_link = $to_root . 'logout.php';
+$dashboard_link = app_url('views/' . $role_folder . 'dashboard.php');
+$report_link = app_url('views/student/report_incident.php');
+$users_link = app_url('views/admin/users.php');
+$settings_link = app_url('views/change_password.php');
+$logout_link = app_url('logout.php');
 
-// Active state detection
+$current_path = $_SERVER['PHP_SELF'] ?? '';
 $is_dashboard = basename($current_path) === 'dashboard.php';
 $is_report = basename($current_path) === 'report_incident.php';
 $is_users = basename($current_path) === 'users.php';
@@ -37,7 +21,7 @@ $is_settings = basename($current_path) === 'change_password.php';
 ?>
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-        <img src="<?php echo $logo_path; ?>" alt="Logo">
+        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Logo">
         <span>CIRS</span>
     </div>
     
@@ -50,20 +34,20 @@ $is_settings = basename($current_path) === 'change_password.php';
     </div>
 
     <nav class="sidebar-nav">
-        <a href="<?php echo $dashboard_link; ?>" class="nav-item <?php echo $is_dashboard ? 'active' : ''; ?>">
+        <a href="<?php echo htmlspecialchars($dashboard_link); ?>" class="nav-item <?php echo $is_dashboard ? 'active' : ''; ?>">
             <i class="fas fa-th-large"></i>
             <span>Dashboard</span>
         </a>
         
         <?php if ($_SESSION['user_role'] === 'student'): ?>
-            <a href="<?php echo $report_link; ?>" class="nav-item <?php echo $is_report ? 'active' : ''; ?>">
+            <a href="<?php echo htmlspecialchars($report_link); ?>" class="nav-item <?php echo $is_report ? 'active' : ''; ?>">
                 <i class="fas fa-plus-circle"></i>
                 <span>Report Incident</span>
             </a>
         <?php endif; ?>
 
         <?php if ($_SESSION['user_role'] === 'admin'): ?>
-            <a href="<?php echo $users_link; ?>" class="nav-item <?php echo $is_users ? 'active' : ''; ?>">
+            <a href="<?php echo htmlspecialchars($users_link); ?>" class="nav-item <?php echo $is_users ? 'active' : ''; ?>">
                 <i class="fas fa-users"></i>
                 <span>Manage Users</span>
             </a>
@@ -71,14 +55,14 @@ $is_settings = basename($current_path) === 'change_password.php';
         
         <div class="sidebar-nav-label">Account</div>
         
-        <a href="<?php echo $settings_link; ?>" class="nav-item <?php echo $is_settings ? 'active' : ''; ?>">
+        <a href="<?php echo htmlspecialchars($settings_link); ?>" class="nav-item <?php echo $is_settings ? 'active' : ''; ?>">
             <i class="fas fa-cog"></i>
             <span>Settings</span>
         </a>
     </nav>
 
     <div class="sidebar-footer">
-        <a href="<?php echo $logout_link; ?>" class="nav-item">
+        <a href="<?php echo htmlspecialchars($logout_link); ?>" class="nav-item">
             <i class="fas fa-sign-out-alt"></i>
             <span>Sign Out</span>
         </a>

@@ -122,6 +122,22 @@ function getDashboardPath($role) {
 }
 
 /**
+ * Absolute path from site root for links and assets (works in subfolders and at domain root).
+ * @param string $path e.g. index.php, pictures/logo.jpg, views/student/dashboard.php
+ */
+function app_url($path) {
+    if (!defined('BASE_URL')) {
+        require_once __DIR__ . '/../config/db.php';
+    }
+    $path = '/' . ltrim((string) $path, '/');
+    $base = BASE_URL;
+    if ($base === '' || $base === '/') {
+        return $path;
+    }
+    return rtrim((string) $base, '/') . $path;
+}
+
+/**
  * Display flash message
  * @param string $message Message to display
  * @param string $type Message type (success, error, warning, info)

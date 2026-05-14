@@ -24,7 +24,7 @@ if (!defined('BASE_URL')) {
     if ($baseEnv !== false && $baseEnv !== '') {
         define('BASE_URL', rtrim($baseEnv, '/'));
     } else {
-        $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
+        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/'));
         $projectRoot = rtrim(str_replace(
             ['/views/admin', '/views/officer', '/views/student', '/views', '/handlers', '/controllers', '/models', '/helpers', '/config'],
             '',

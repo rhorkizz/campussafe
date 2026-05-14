@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- Logo -->
             <div class="auth-logo">
                 <div class="auth-logo-icon" style="background:transparent;padding:2px;">
-                    <img src="pictures/logo.jpg" style="width:44px;height:44px;object-fit:contain;border-radius:8px;" alt="UPSA Logo">
+                    <img src="<?php echo htmlspecialchars(app_url('pictures/logo.jpg')); ?>" style="width:44px;height:44px;object-fit:contain;border-radius:8px;" alt="UPSA Logo">
                 </div>
                 <div class="auth-logo-text">
                     <h1>UPSA CIRS</h1>
