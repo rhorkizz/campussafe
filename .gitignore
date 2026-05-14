@@ -1,0 +1,13 @@
+# Local secrets — copy mail.example.php to mail.php and fill in values
+config/mail.php
+
+# User uploads (keep folder via .htaccess)
+uploads/*
+!uploads/.htaccess
+
+# OS / editor
+Thumbs.db
+Desktop.ini
+*.log
+.idea/
+.vscode/

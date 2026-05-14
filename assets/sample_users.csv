@@ -1,0 +1,6 @@
+user_id,full_name,role,department_id,password
+UPSA004,Abena Fosuah,student,,2003-01-15
+UPSA005,Kofi Owusu,student,,2002-08-22
+STAFF004,Mr. Yaw Boateng,campus_officer,1,staff123
+STAFF005,Mrs. Efua Danso,campus_officer,3,staff123
+HOST002,Porter Kwame,hostel_officer,5,hostel123
