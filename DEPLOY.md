@@ -120,9 +120,11 @@ If these rows are missing, re-import `database/schema_shared_hosting.sql` into t
 
 2. **Confirm the app uses that database** — Wrong `DB_NAME` / credentials in `config/db.php` or env vars can point to an **empty** database while phpMyAdmin shows data in another.
 
-3. **Reload before retry** — If you see “Invalid session token”, reload the page once (CSRF). The message **“Invalid user ID or password”** means CSRF passed but the user was not found or the password did not match.
+3. **Plain-text passwords in the database** — If `LENGTH(password)` is about **8–14** and the value starts with a **date** or `staff`, the column holds **plain text**, not bcrypt. The app cannot log you in until hashes are fixed. In phpMyAdmin → **SQL**, run the script **`database/fix_passwords_to_bcrypt.sql`** from this repository (paste its contents), then verify again: `hash_len` should be **60** and `start` should be **`$2y$10`**.
 
-4. **Redeploy updated PHP** — Upload the latest `models/User.php` and `controllers/StudentController.php` from the repo: login now matches **User ID case-insensitively** (`upsa001` = `UPSA001`) and tolerates stray whitespace around stored password hashes.
+4. **Reload before retry** — If you see “Invalid session token”, reload the page once (CSRF). The message **“Invalid user ID or password”** means CSRF passed but the user was not found or the password did not match.
+
+5. **Redeploy updated PHP** — Upload the latest `models/User.php` and `controllers/StudentController.php` from the repo: login now matches **User ID case-insensitively** (`upsa001` = `UPSA001`) and tolerates stray whitespace around stored password hashes.
 
 ---
 
