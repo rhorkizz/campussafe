@@ -63,7 +63,8 @@ class StudentController {
             // Note: In your schema, passwords might be plain text (like dates) for students
             // For production, all passwords should be hashed
             $passwordMatch = false;
-            if ($user && password_verify($password, $user['password'])) {
+            $storedHash = isset($user['password']) ? trim((string) $user['password']) : '';
+            if ($user && $storedHash !== '' && password_verify($password, $storedHash)) {
                 $passwordMatch = true;
             }
             

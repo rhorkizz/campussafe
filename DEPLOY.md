@@ -92,14 +92,48 @@ Ensure `uploads/` exists and is **writable** by the web server if you use incide
 
 ---
 
-## 8. Production hygiene
+## 8. First login (sample accounts)
+
+Use **User ID** (not email) on the login form. Passwords are **case-sensitive**.
+
+| User ID   | Password   | Role        |
+|-----------|------------|-------------|
+| `ADMIN001` | `admin123` | Admin       |
+| `STAFF001` | `staff123` | Officer     |
+| `UPSA001`  | `2001-05-14` | Student (date format `YYYY-MM-DD`) |
+| `UPSA002`  | `2002-09-22` | Student   |
+| `UPSA003`  | `2000-12-03` | Student   |
+| `HOST001`  | `hostel123` | Hostel officer |
+
+If these rows are missing, re-import `database/schema_shared_hosting.sql` into the correct database (see below).
+
+---
+
+## 9. Login still fails?
+
+1. **Confirm data exists** — In phpMyAdmin, select your app database → **SQL**:
+   ```sql
+   SELECT user_id, LENGTH(password) AS hash_len, LEFT(password, 4) AS hash_start FROM users LIMIT 5;
+   ```
+   - You should see rows. If **no rows**, the schema import did not run on this database (wrong DB selected, or import errored).
+   - `hash_len` should be **60** and `hash_start` should be **`$2y$`** (bcrypt). If `hash_len` is shorter, the column was truncated or the import was corrupted — re-import or fix the column type (`VARCHAR(255)`).
+
+2. **Confirm the app uses that database** — Wrong `DB_NAME` / credentials in `config/db.php` or env vars can point to an **empty** database while phpMyAdmin shows data in another.
+
+3. **Reload before retry** — If you see “Invalid session token”, reload the page once (CSRF). The message **“Invalid user ID or password”** means CSRF passed but the user was not found or the password did not match.
+
+4. **Redeploy updated PHP** — Upload the latest `models/User.php` and `controllers/StudentController.php` from the repo: login now matches **User ID case-insensitively** (`upsa001` = `UPSA001`) and tolerates stray whitespace around stored password hashes.
+
+---
+
+## 10. Production hygiene
 
 - Remove or **block public access** to dev-only scripts (`debug_*.php`, `test_*.php`, `tmp_*.php`, etc.) before sharing the URL widely.
 - Change default **demo passwords** in the database for anything beyond a class demo (see comments in `database/schema.sql` for sample credentials).
 
 ---
 
-## 9. Ongoing workflow
+## 11. Ongoing workflow
 
 - Develop locally → **commit/push** to [GitHub](https://github.com/Rhorkizz/CampusSafe).
 - After changes, **re-upload** changed files (or use the host’s Git deploy if they offer it).
