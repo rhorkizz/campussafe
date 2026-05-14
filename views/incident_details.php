@@ -16,7 +16,7 @@ $incident_id = $_GET['id'] ?? null;
 if (!$incident_id) {
     setFlashMessage("Invalid incident ID", "error");
     $role = $_SESSION['user_role'] ?? 'student';
-    redirect('../' . getDashboardPath($role));
+    redirect(app_url(getDashboardPath($role)));
 }
 
 $incident = null;
@@ -46,7 +46,7 @@ try {
 if (!$incident) {
         setFlashMessage("Incident not found.", "error");
         $role = $_SESSION['user_role'] ?? 'student';
-        redirect('../' . getDashboardPath($role));
+        redirect(app_url(getDashboardPath($role)));
     }
 
     // Authorization check: 
@@ -59,7 +59,7 @@ if (!$incident) {
 
     if ($user_role === 'student' && $incident['reported_by'] !== $user_id) {
         setFlashMessage("Access denied.", "error");
-        redirect('../' . getDashboardPath($user_role));
+        redirect(app_url(getDashboardPath($user_role)));
     }
     
     // For officers, strictly speaking we should check assignment, but for now allowing viewing if they have the link might be acceptable 
@@ -74,8 +74,6 @@ if (!$incident) {
     $error = $e->getMessage();
 }
 
-$dashboard = getDashboardPath($_SESSION['user_role'] ?? 'student');
-$back_link = str_replace('views/', '', $dashboard);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,10 +81,10 @@ $back_link = str_replace('views/', '', $dashboard);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Incident Details - <?php echo htmlspecialchars($incident['title'] ?? 'Incident'); ?></title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=18">
+    <link rel="stylesheet" href="<?php echo htmlspecialchars(app_url('assets/css/style.css')); ?>?v=19">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../assets/js/main.js?v=18" defer></script>
+    <script src="<?php echo htmlspecialchars(app_url('assets/js/main.js')); ?>?v=19" defer></script>
 </head>
 <body data-theme="light">
     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
@@ -188,7 +186,7 @@ $back_link = str_replace('views/', '', $dashboard);
                         <?php if (!empty($incident['attachment_path'])): ?>
                             <div style="margin-bottom: 3rem;">
                                 <strong style="display: block; margin-bottom: 1rem; color: var(--text-main); font-family: Sora; font-size: 1.1rem;">Attached Evidence</strong>
-                                <img src="../<?php echo htmlspecialchars($incident['attachment_path']); ?>" 
+                                <img src="<?php echo htmlspecialchars(app_url($incident['attachment_path'])); ?>" 
                                      alt="Incident Attachment" 
                                      class="lightbox-trigger"
                                      style="max-width: 100%; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-md); cursor: pointer; transition: transform 0.3s ease;">
@@ -200,7 +198,7 @@ $back_link = str_replace('views/', '', $dashboard);
                         <?php if ($_SESSION['user_role'] === 'admin' || $_SESSION['user_role'] === 'officer'): ?>
                         <div class="management-panel" style="margin-bottom: 3rem; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 20px; background: var(--bg-secondary);">
                             <h3 style="font-family: Sora; font-size: 1rem; color: var(--text-main); margin-bottom: 1.5rem;"><i class="fas fa-tools" style="margin-right: 10px; color: var(--primary);"></i> Management Actions</h3>
-                            <form action="../handlers/incident_action_handler.php" method="POST" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; align-items: flex-end;">
+                            <form action="<?php echo htmlspecialchars(app_url('handlers/incident_action_handler.php')); ?>" method="POST" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; align-items: flex-end;">
                                 <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
                                 <input type="hidden" name="incident_id" value="<?php echo $incident_id; ?>">
                                 <input type="hidden" name="action" value="update_status">
@@ -259,7 +257,7 @@ $back_link = str_replace('views/', '', $dashboard);
                             </div>
 
                             <!-- Comment Input -->
-                            <form action="../handlers/incident_action_handler.php" method="POST" style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border-color);">
+                            <form action="<?php echo htmlspecialchars(app_url('handlers/incident_action_handler.php')); ?>" method="POST" style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border-color);">
                                 <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
                                 <input type="hidden" name="incident_id" value="<?php echo $incident_id; ?>">
                                 <input type="hidden" name="action" value="add_comment">

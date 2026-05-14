@@ -20,11 +20,28 @@ function sanitizeInput($data) {
 }
 
 /**
- * Redirect to a specific page
- * @param string $url URL to redirect to
+ * Redirect to a specific page.
+ * Resolves app-relative paths (e.g. views/..., ../index.php) via app_url() so hosting at domain root or in a subfolder works.
  */
 function redirect($url) {
-    header("Location: " . $url);
+    $url = trim((string) $url);
+    if ($url === '') {
+        header('Location: ' . app_url('index.php'));
+        exit();
+    }
+    if (preg_match('#^https?://#i', $url)) {
+        header('Location: ' . $url);
+        exit();
+    }
+    if (strpos($url, '/') === 0) {
+        header('Location: ' . $url);
+        exit();
+    }
+    while (strpos($url, '../') === 0) {
+        $url = substr($url, 3);
+    }
+    $url = ltrim($url, '/');
+    header('Location: ' . app_url($url));
     exit();
 }
 
@@ -50,43 +67,13 @@ function hasRole($role) {
  */
 function requireLogin() {
     if (!isLoggedIn()) {
-        redirect(BASE_URL . '/index.php');
+        redirect(app_url('index.php'));
     }
-    
-    // Check if user is forced to change password
+
     if (isset($_SESSION['must_change_password']) && $_SESSION['must_change_password'] == 1) {
-        // Don't redirect if we're already on the change_password.php or logout.php page
-        if (strpos($_SERVER['PHP_SELF'], 'change_password.php') === false && 
+        if (strpos($_SERVER['PHP_SELF'], 'change_password.php') === false &&
             strpos($_SERVER['PHP_SELF'], 'logout.php') === false) {
-            
-            // Determine the path to change_password.php based on current location
-            // If in views/role/dashboard.php, need to go up 2 levels then into views/
-            // If in views/admin/dashboard.php, self is /views/admin/dashboard.php
-            $depth = substr_count($_SERVER['PHP_SELF'], '/');
-            // This is a bit brittle, but consistent with existing redirect usage.
-            // Let's use a simpler check: if we are in views/ something, we need views/change_password.php
-            // but the include structure is complex.
-            
-            // Based on getDashboardPath returning 'views/...', 
-            // the root index.php redirects to 'views/...'
-            // So from index, it's 'views/change_password.php'
-            
-            // Standard approach: if we aren't in 'views/', go to 'views/change_password.php'
-            // If we ARE in 'views/subdirectory', go to '../change_password.php'
-            // If we ARE in 'views/' (root of views), go to 'change_password.php'
-            
-            $path_to_views = '';
-            if (strpos($_SERVER['PHP_SELF'], '/views/admin/') !== false || 
-                strpos($_SERVER['PHP_SELF'], '/views/officer/') !== false ||
-                strpos($_SERVER['PHP_SELF'], '/views/student/') !== false) {
-                $path_to_views = '../change_password.php';
-            } elseif (strpos($_SERVER['PHP_SELF'], '/views/') !== false) {
-                $path_to_views = 'change_password.php';
-            } else {
-                $path_to_views = 'views/change_password.php';
-            }
-            
-            redirect($path_to_views);
+            redirect(app_url('views/change_password.php'));
         }
     }
 }
@@ -100,7 +87,7 @@ function requireRole($role) {
     if (!hasRole($role)) {
         // Redirect to appropriate dashboard based on user's actual role
         $userRole = $_SESSION['user_role'] ?? 'student';
-        redirect(BASE_URL . '/' . getDashboardPath($userRole));
+        redirect(app_url(getDashboardPath($userRole)));
     }
 }
 
@@ -123,18 +110,35 @@ function getDashboardPath($role) {
 
 /**
  * Absolute path from site root for links and assets (works in subfolders and at domain root).
- * @param string $path e.g. index.php, pictures/logo.jpg, views/student/dashboard.php
+ * @param string $path e.g. index.php, views/incident_details.php?id=1
  */
 function app_url($path) {
     if (!defined('BASE_URL')) {
         require_once __DIR__ . '/../config/db.php';
     }
-    $path = '/' . ltrim((string) $path, '/');
+    $full = (string) $path;
+    $qpos = strpos($full, '?');
+    $query = '';
+    if ($qpos !== false) {
+        $query = substr($full, $qpos);
+        $full = substr($full, 0, $qpos);
+    }
+    $pathOnly = '/' . ltrim($full, '/');
     $base = BASE_URL;
     if ($base === '' || $base === '/') {
-        return $path;
+        return $pathOnly . $query;
     }
-    return rtrim((string) $base, '/') . $path;
+    return rtrim((string) $base, '/') . $pathOnly . $query;
+}
+
+/**
+ * URL path prefix without trailing slash (empty string = app at domain root). For JS fetch/redirect.
+ */
+function app_base() {
+    if (!defined('BASE_URL')) {
+        require_once __DIR__ . '/../config/db.php';
+    }
+    return rtrim((string) BASE_URL, '/');
 }
 
 /**

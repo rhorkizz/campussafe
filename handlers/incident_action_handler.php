@@ -9,13 +9,13 @@ require_once __DIR__ . '/../helpers/functions.php';
 requireLogin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirect('../index.php');
+    redirect(app_url('index.php'));
 }
 
 // 1. Verify CSRF Token
 if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
     setFlashMessage("Invalid or expired session token. Please try again.", "error");
-    redirect($_SERVER['HTTP_REFERER'] ?? '../index.php');
+    redirect($_SERVER['HTTP_REFERER'] ?? app_url('index.php'));
 }
 
 require_once __DIR__ . '/../config/db.php';
@@ -24,7 +24,7 @@ require_once __DIR__ . '/../models/Incident.php';
 $db = getDBConnection();
 if (!$db) {
     setFlashMessage("Database connection failed.", "error");
-    redirect($_SERVER['HTTP_REFERER'] ?? '../index.php');
+    redirect($_SERVER['HTTP_REFERER'] ?? app_url('index.php'));
 }
 
 $incidentModel = new Incident($db);
@@ -33,7 +33,7 @@ $incident_id = $_POST['incident_id'] ?? null;
 
 if (!$incident_id) {
     setFlashMessage("Invalid incident ID.", "error");
-    redirect('../index.php');
+    redirect(app_url('index.php'));
 }
 
 switch ($action) {
@@ -84,4 +84,4 @@ switch ($action) {
 }
 
 // Redirect back to the details page
-redirect("../views/incident_details.php?id=" . urlencode($incident_id));
+redirect(app_url('views/incident_details.php?id=' . urlencode((string) $incident_id)));

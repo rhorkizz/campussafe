@@ -34,10 +34,10 @@ $pending_count = count(array_filter($incidents, function($i) { return $i['status
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPSA Incident - Dashboard</title>
-    <link rel="stylesheet" href="../../assets/css/style.css?v=18">
+    <link rel="stylesheet" href="<?php echo htmlspecialchars(app_url('assets/css/style.css')); ?>?v=19">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../../assets/js/main.js?v=18" defer></script>
+    <script src="<?php echo htmlspecialchars(app_url('assets/js/main.js')); ?>?v=19" defer></script>
 </head>
 <body data-theme="light">
     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
@@ -62,7 +62,7 @@ $pending_count = count(array_filter($incidents, function($i) { return $i['status
                 <?php endif; ?>
 
                 <div class="dashboard-actions" style="margin-bottom: 2.5rem;">
-                    <a href="report_incident.php" class="btn-primary">
+                    <a href="<?php echo htmlspecialchars(app_url('views/student/report_incident.php')); ?>" class="btn-primary">
                         <i class="fas fa-plus-circle"></i> Report New Incident
                     </a>
                 </div>
@@ -97,7 +97,7 @@ $pending_count = count(array_filter($incidents, function($i) { return $i['status
                                         <tr>
                                             <td data-label="ID" style="font-weight: 700; color: var(--text-muted);">#<?php echo htmlspecialchars($incident['id'] ?? $incident['incident_id']); ?></td>
                                             <td data-label="Title">
-                                                <a href="../incident_details.php?id=<?php echo htmlspecialchars($incident['id'] ?? $incident['incident_id']); ?>" style="color:var(--primary); font-weight:700; text-decoration:none; display: block;">
+                                                <a href="<?php echo htmlspecialchars(app_url('views/incident_details.php?id=' . (int)($incident['id'] ?? $incident['incident_id']))); ?>" style="color:var(--primary); font-weight:700; text-decoration:none; display: block;">
                                                     <?php echo htmlspecialchars($incident['title'] ?? 'N/A'); ?>
                                                 </a>
                                             </td>
@@ -115,7 +115,7 @@ $pending_count = count(array_filter($incidents, function($i) { return $i['status
                                             </td>
                                             <td data-label="Photo">
                                                 <?php if (!empty($incident['attachment_path'])): ?>
-                                                    <a href="#" class="view-attachment" data-src="../../<?php echo htmlspecialchars($incident['attachment_path']); ?>" style="color: var(--primary); font-weight: 700; font-size: 11px; text-decoration: none;">View</a>
+                                                    <a href="#" class="view-attachment" data-src="<?php echo htmlspecialchars(app_url($incident['attachment_path'])); ?>" style="color: var(--primary); font-weight: 700; font-size: 11px; text-decoration: none;">View</a>
                                                 <?php else: ?>
                                                     <span style="color: #cbd5e1;">—</span>
                                                 <?php endif; ?>

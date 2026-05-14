@@ -32,11 +32,11 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CIRS - Officer Dashboard</title>
-    <link rel="stylesheet" href="../../assets/css/style.css?v=18">
+    <link rel="stylesheet" href="<?php echo htmlspecialchars(app_url('assets/css/style.css')); ?>?v=19">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../../assets/js/main.js?v=18" defer></script>
+    <script src="<?php echo htmlspecialchars(app_url('assets/js/main.js')); ?>?v=19" defer></script>
 </head>
 <body data-theme="light">
     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
@@ -113,7 +113,7 @@ try {
                                             <td style="font-weight: 600;"><?php echo htmlspecialchars($incident['student_name'] ?? 'Anonymous'); ?></td>
                                             <td><span style="font-size: 13px; color: var(--text-muted);"><?php echo htmlspecialchars($incident['location'] ?? 'N/A'); ?></span></td>
                                             <td>
-                                                <a href="../incident_details.php?id=<?php echo htmlspecialchars($incident['id']); ?>" style="color:var(--primary); font-weight:600; text-decoration:none; display: block;">
+                                                <a href="<?php echo htmlspecialchars(app_url('views/incident_details.php?id=' . (int) $incident['id'])); ?>" style="color:var(--primary); font-weight:600; text-decoration:none; display: block;">
                                                     <?php echo htmlspecialchars($incident['title'] ?? substr($incident['description'], 0, 40) . '...'); ?>
                                                 </a>
                                             </td>
@@ -129,7 +129,7 @@ try {
                                             </td>
                                             <td>
                                                 <?php if (!empty($incident['attachment_path'])): ?>
-                                                    <a href="#" class="view-attachment" data-src="../../<?php echo htmlspecialchars($incident['attachment_path']); ?>" style="color: var(--primary); font-weight: 700; font-size: 12px; text-decoration: none;">View</a>
+                                                    <a href="#" class="view-attachment" data-src="<?php echo htmlspecialchars(app_url($incident['attachment_path'])); ?>" style="color: var(--primary); font-weight: 700; font-size: 12px; text-decoration: none;">View</a>
                                                 <?php else: ?>
                                                     <span style="color: #cbd5e1;">—</span>
                                                 <?php endif; ?>
@@ -162,7 +162,7 @@ try {
                 
                 if (confirm('Update incident status to ' + newStatus.replace('_', ' ') + '?')) {
                     // Using redirect as per existing logic, but UI is now enhanced
-                    window.location.href = '../../handlers/update_incident_status.php?id=' + incidentId + '&status=' + newStatus;
+                    window.location.href = (window.__CAMPUS_SAFE_BASE__ || '') + '/handlers/update_incident_status.php?id=' + incidentId + '&status=' + newStatus;
                 } else {
                     // Reset to original value if cancelled (location reload would handle it, but this is cleaner)
                     location.reload();

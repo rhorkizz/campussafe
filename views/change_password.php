@@ -9,7 +9,7 @@ require_once __DIR__ . '/../helpers/functions.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    redirect('../index.php');
+    redirect(app_url('index.php'));
 }
 
 // Check if there is a flash message
@@ -30,7 +30,7 @@ if ($flash) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CIRS - Change Password</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=18">
+    <link rel="stylesheet" href="<?php echo htmlspecialchars(app_url('assets/css/style.css')); ?>?v=19">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -148,7 +148,7 @@ if ($flash) {
             </div>
         <?php endif; ?>
 
-        <form action="../handlers/change_password_handler.php" method="POST">
+        <form action="<?php echo htmlspecialchars(app_url('handlers/change_password_handler.php')); ?>" method="POST">
             <div class="form-group" style="margin-bottom: 1.5rem;">
                 <label for="new_password">New Password</label>
                 <input type="password" id="new_password" name="new_password" required minlength="6" placeholder="At least 6 characters">

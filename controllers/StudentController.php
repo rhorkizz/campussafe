@@ -108,7 +108,7 @@ class StudentController {
 
         requireLogin();
         if (!hasRole('student')) {
-            redirect(BASE_URL . '/views/student/dashboard.php');
+            redirect(app_url('views/student/dashboard.php'));
         }
         if ($this->db === null) {
             return ['success' => false, 'message' => 'Database not available (demo mode).'];
@@ -232,7 +232,7 @@ class StudentController {
                 }
 
                 setFlashMessage('Incident reported successfully!', 'success');
-                redirect(BASE_URL . '/views/student/dashboard.php');
+                redirect(app_url('views/student/dashboard.php'));
             } else {
                 return ['success' => false, 'message' => 'Failed to submit incident. Please try again.'];
             }
@@ -249,7 +249,7 @@ class StudentController {
     public function getDashboardData() {
         requireLogin();
         if (!hasRole('student')) {
-            redirect('../../index.php');
+            redirect(app_url('index.php'));
         }
 
         if ($this->db === null) {

@@ -11,7 +11,7 @@ require_once __DIR__ . '/../controllers/OfficerController.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    redirect('../index.php');
+    redirect(app_url('index.php'));
 }
 
 // Check role
@@ -33,7 +33,7 @@ if ($incident_id <= 0 || empty($status)) {
     }
     // Otherwise redirect back
     setFlashMessage('Invalid parameters', 'error');
-    redirect('../views/officer/dashboard.php');
+    redirect(app_url('views/officer/dashboard.php'));
 }
 
 // Update status
@@ -46,5 +46,5 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     echo json_encode($result);
 } else {
     setFlashMessage($result['message'], $result['success'] ? 'success' : 'error');
-    redirect('../views/officer/dashboard.php');
+    redirect(app_url('views/officer/dashboard.php'));
 }

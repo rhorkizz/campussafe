@@ -32,11 +32,11 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CIRS - Admin Dashboard</title>
-    <link rel="stylesheet" href="../../assets/css/style.css?v=18">
+    <link rel="stylesheet" href="<?php echo htmlspecialchars(app_url('assets/css/style.css')); ?>?v=19">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../../assets/js/main.js?v=18" defer></script>
+    <script src="<?php echo htmlspecialchars(app_url('assets/js/main.js')); ?>?v=19" defer></script>
 </head>
 <body data-theme="light">
     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
@@ -113,7 +113,7 @@ try {
                                             <td style="font-weight: 600;"><?php echo htmlspecialchars($incident['student_name'] ?? 'Anonymous'); ?></td>
                                             <td><span style="font-size: 13px; color: var(--text-muted);"><?php echo htmlspecialchars($incident['location'] ?? 'N/A'); ?></span></td>
                                             <td>
-                                                <a href="../incident_details.php?id=<?php echo htmlspecialchars($incident['id']); ?>" style="color:var(--primary); font-weight:600; text-decoration:none; display: block;">
+                                                <a href="<?php echo htmlspecialchars(app_url('views/incident_details.php?id=' . (int) $incident['id'])); ?>" style="color:var(--primary); font-weight:600; text-decoration:none; display: block;">
                                                     <?php echo htmlspecialchars($incident['title'] ?? substr($incident['description'], 0, 40) . '...'); ?>
                                                 </a>
                                             </td>
@@ -131,7 +131,7 @@ try {
                                             <td style="font-size: 12px; color: var(--text-muted);"><?php echo date('M d, H:i', strtotime($incident['created_at'])); ?></td>
                                             <td>
                                                 <div style="display: flex; gap: 8px;">
-                                                    <a href="../incident_details.php?id=<?php echo $incident['id']; ?>" class="btn-small" title="View details" style="padding: 6px 12px; border-radius: 8px; font-size: 12px; background: var(--bg-secondary); color: var(--text-main); text-decoration: none; border: 1px solid var(--border-color);"><i class="fas fa-eye"></i></a>
+                                                    <a href="<?php echo htmlspecialchars(app_url('views/incident_details.php?id=' . (int) $incident['id'])); ?>" class="btn-small" title="View details" style="padding: 6px 12px; border-radius: 8px; font-size: 12px; background: var(--bg-secondary); color: var(--text-main); text-decoration: none; border: 1px solid var(--border-color);"><i class="fas fa-eye"></i></a>
                                                     <button class="btn-delete" data-incident-id="<?php echo $incident['id']; ?>" title="Delete incident" style="padding: 6px 12px; border-radius: 8px; font-size: 12px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); cursor: pointer;"><i class="fas fa-trash-alt"></i></button>
                                                 </div>
                                             </td>
@@ -163,7 +163,7 @@ try {
                         const originalClass = icon.className;
                         icon.className = 'fas fa-spinner fa-spin';
                         
-                        fetch('../../handlers/delete_incident.php', {
+                        fetch((window.__CAMPUS_SAFE_BASE__ || '') + '/handlers/delete_incident.php', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                             body: 'incident_id=' + incidentId + '&csrf_token=' + encodeURIComponent(csrfToken)

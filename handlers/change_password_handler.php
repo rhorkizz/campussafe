@@ -8,11 +8,11 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../helpers/functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirect('../views/change_password.php');
+    redirect(app_url('views/change_password.php'));
 }
 
 if (!isset($_SESSION['user_id'])) {
-    redirect('../index.php');
+    redirect(app_url('index.php'));
 }
 
 $new_password = $_POST['new_password'] ?? '';
@@ -21,17 +21,17 @@ $confirm_password = $_POST['confirm_password'] ?? '';
 // Basic validation
 if (empty($new_password) || empty($confirm_password)) {
     setFlashMessage("Please fill in all fields.", "error");
-    redirect('../views/change_password.php');
+    redirect(app_url('views/change_password.php'));
 }
 
 if ($new_password !== $confirm_password) {
     setFlashMessage("Passwords do not match.", "error");
-    redirect('../views/change_password.php');
+    redirect(app_url('views/change_password.php'));
 }
 
 if (strlen($new_password) < 6) {
     setFlashMessage("Password must be at least 6 characters long.", "error");
-    redirect('../views/change_password.php');
+    redirect(app_url('views/change_password.php'));
 }
 
 try {
@@ -56,12 +56,12 @@ try {
         
         // Redirect based on role
         $role = $_SESSION['user_role'] ?? 'student';
-        redirect('../' . getDashboardPath($role));
+        redirect(app_url(getDashboardPath($role)));
     } else {
         throw new Exception("Failed to update password.");
     }
 
 } catch (Exception $e) {
     setFlashMessage("Error: " . $e->getMessage(), "error");
-    redirect('../views/change_password.php');
+    redirect(app_url('views/change_password.php'));
 }

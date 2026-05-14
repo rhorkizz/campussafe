@@ -50,10 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPSA SafeReport - Report Incident</title>
-    <link rel="stylesheet" href="../../assets/css/style.css?v=18">
+    <link rel="stylesheet" href="<?php echo htmlspecialchars(app_url('assets/css/style.css')); ?>?v=19">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../../assets/js/main.js?v=18" defer></script>
+    <script src="<?php echo htmlspecialchars(app_url('assets/js/main.js')); ?>?v=19" defer></script>
 </head>
 <body data-theme="light">
     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 <?php endif; ?>
 
-                <form method="POST" action="report_incident.php" class="incident-form" enctype="multipart/form-data">
+                <form method="POST" action="<?php echo htmlspecialchars(app_url('views/student/report_incident.php')); ?>" class="incident-form" enctype="multipart/form-data">
                     <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
                     
                     <!-- Section: Incident Details -->
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="text" id="title" name="title" required placeholder="e.g. Broken streetlight in front of Hall B" style="width: 100%; padding: 1rem; border-radius: 12px; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); font-family: 'Inter', sans-serif;">
                         </div>
 
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 32px;">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 32px;" class="report-form-grid-3">
                             <div class="form-group">
                                 <label style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 10px;">Location Area <span style="color: var(--danger);">*</span></label>
                                 <select id="location_type" name="location_type" required style="width: 100%; padding: 1rem; border-radius: 12px; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main);">
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <!-- Section: Additional Details -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;" class="report-form-grid-2">
                         <!-- Section: Evidence -->
                         <div class="dash-section" style="background: var(--bg-card); padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
                             <h2 style="font-family: 'Sora', sans-serif; font-size: 1.1rem; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 32px;">
@@ -169,11 +169,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 4rem;">
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 4rem; flex-wrap: wrap;">
                         <button type="submit" class="btn-primary" style="padding: 1.25rem 3rem; border-radius: 14px; font-weight: 700; font-size: 1rem; border: none; cursor: pointer;">
                             Submit Incident <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
                         </button>
-                        <a href="dashboard.php" class="btn-secondary" style="padding: 1.25rem 2.5rem; border-radius: 14px; font-weight: 600; text-decoration: none; color: var(--text-main); background: var(--bg-secondary); border: 1px solid var(--border-color);">Cancel</a>
+                        <a href="<?php echo htmlspecialchars(app_url('views/student/dashboard.php')); ?>" class="btn-secondary" style="padding: 1.25rem 2.5rem; border-radius: 14px; font-weight: 600; text-decoration: none; color: var(--text-main); background: var(--bg-secondary); border: 1px solid var(--border-color);">Cancel</a>
                     </div>
                 </form>
             </div>

@@ -10,7 +10,7 @@ require_once __DIR__ . '/helpers/functions.php';
 
 // Redirect if already logged in
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
-    redirect(getDashboardPath($_SESSION['user_role']));
+    redirect(app_url(getDashboardPath($_SESSION['user_role'])));
 }
 
 $demoMode = defined('BYPASS_LOGIN_DEMO') && BYPASS_LOGIN_DEMO;

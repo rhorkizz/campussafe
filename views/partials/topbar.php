@@ -1,18 +1,25 @@
+<?php
+if (!function_exists('app_url')) {
+    require_once dirname(__DIR__, 2) . '/helpers/functions.php';
+}
+if (empty($GLOBALS['_campus_safe_app_base_js'])) {
+    $GLOBALS['_campus_safe_app_base_js'] = true;
+    echo '<script>window.__CAMPUS_SAFE_BASE__=' . json_encode(app_base()) . ';</script>' . "\n";
+}
+?>
 <header class="main-topbar">
-    <div class="topbar-left flex-responsive" style="gap: 16px; flex-direction: row; align-items: center;">
-        <button class="sidebar-toggle">
+    <div class="topbar-left topbar-left-cluster">
+        <button type="button" class="sidebar-toggle" aria-label="Open menu">
             <i class="fas fa-bars"></i>
         </button>
-        <h1 class="page-title"><?php echo $page_title ?? 'Dashboard'; ?></h1>
+        <h1 class="page-title"><?php echo htmlspecialchars($page_title ?? 'Dashboard'); ?></h1>
     </div>
-    
+
     <div class="topbar-right">
         <div class="topbar-actions">
             <div class="topbar-notification" id="notification-trigger">
                 <i class="fas fa-bell"></i>
                 <?php
-                // For admins/officers: count pending + in_progress as "needing attention"
-                // For students: count only their own pending
                 $userRole        = $_SESSION['user_role'] ?? 'student';
                 $pending_count   = $stats['pending_incidents'] ?? 0;
                 $attention_count = ($userRole === 'admin' || $userRole === 'officer')
@@ -35,7 +42,6 @@
                             foreach ($incidents as $incident):
                                 if ($shown >= 5) break;
                                 $s = strtolower($incident['status'] ?? '');
-                                // Students see only their own pending; officers/admins see pending + in_progress
                                 $show = ($s === 'pending' || $s === 'submitted');
                                 if ($userRole === 'admin' || $userRole === 'officer') {
                                     $show = $show || ($s === 'in_progress');
@@ -43,7 +49,7 @@
                                 if (!$show) continue;
                                 $shown++;
                                 $incId      = $incident['id'] ?? $incident['incident_id'];
-                                $detailUrl  = BASE_URL . '/views/incident_details.php?id=' . (int)$incId;
+                                $detailUrl  = app_url('views/incident_details.php?id=' . (int) $incId);
                                 $iconClass  = ($s === 'in_progress') ? 'fa-clock text-warning' : 'fa-exclamation-circle';
                             ?>
                                 <a href="<?php echo htmlspecialchars($detailUrl); ?>" class="notification-item">
@@ -74,7 +80,7 @@
                     </div>
                     <?php if ($attention_count > 0): ?>
                         <div class="dropdown-footer">
-                            <a href="<?php echo BASE_URL . '/' . getDashboardPath($userRole); ?>">
+                            <a href="<?php echo htmlspecialchars(app_url(getDashboardPath($userRole))); ?>">
                                 View all &rarr;
                             </a>
                         </div>

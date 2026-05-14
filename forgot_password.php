@@ -12,7 +12,7 @@ require_once __DIR__ . '/models/User.php';
 
 // Redirect if already logged in
 if (isset($_SESSION['user_id'])) {
-    redirect(BASE_URL . '/' . getDashboardPath($_SESSION['user_role'] ?? 'student'));
+    redirect(app_url(getDashboardPath($_SESSION['user_role'] ?? 'student')));
 }
 
 $message   = '';

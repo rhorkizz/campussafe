@@ -32,7 +32,7 @@ class AdminController {
     public function getDashboardData() {
         requireLogin();
         if (!hasRole('admin')) {
-            redirect('../../index.php');
+            redirect(app_url('index.php'));
         }
 
         if ($this->db === null) {
@@ -158,7 +158,7 @@ class AdminController {
      */
     public function getUsersPageData($roleFilter = null) {
         requireLogin();
-        if (!hasRole('admin')) redirect('../../index.php');
+        if (!hasRole('admin')) redirect(app_url('index.php'));
         if ($this->db === null) {
             return ['users' => [], 'departments' => [], 'roles' => [], 'admin_name' => $_SESSION['user_name'] ?? 'Demo User'];
         }

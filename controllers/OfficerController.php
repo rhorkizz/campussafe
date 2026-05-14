@@ -33,7 +33,7 @@ class OfficerController {
     public function getDashboardData() {
         requireLogin();
         if (!hasRole('officer')) {
-            redirect('../../index.php');
+            redirect(app_url('index.php'));
         }
 
         if ($this->db === null) {

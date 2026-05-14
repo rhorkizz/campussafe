@@ -1,11 +1,11 @@
-<div class="filter-bar" style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; background: var(--bg-card); padding: 1.25rem; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
-    <div style="flex: 1; min-width: 250px; position: relative;">
+<div class="filter-bar filter-bar-app" style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; align-items: stretch; background: var(--bg-card); padding: 1.25rem; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+    <div style="flex: 1 1 200px; min-width: 0; position: relative;">
         <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px;"></i>
         <input type="text" id="searchInput" placeholder="Search incidents by title, location..." 
                style="width: 100%; padding: 0.85rem 1rem 0.85rem 2.8rem; border: 1px solid var(--border-color); border-radius: 12px; font-family: Inter; background: var(--input-bg); color: var(--text-main); font-size: 14px; outline: none; transition: border-color 0.2s;">
     </div>
     
-    <select id="categoryFilter" style="padding: 0.85rem 1rem; border: 1px solid var(--border-color); border-radius: 12px; font-family: Inter; min-width: 160px; background: var(--input-bg); color: var(--text-main); font-size: 14px; outline: none; cursor: pointer;">
+    <select id="categoryFilter" style="padding: 0.85rem 1rem; border: 1px solid var(--border-color); border-radius: 12px; font-family: Inter; min-width: 0; flex: 1 1 140px; max-width: 100%; background: var(--input-bg); color: var(--text-main); font-size: 14px; outline: none; cursor: pointer;">
         <option value="">All Categories</option>
         <?php
         $categories = array_unique(array_column($incidents, 'category_name'));
@@ -16,7 +16,7 @@
         <?php endforeach; ?>
     </select>
     
-    <select id="statusFilter" style="padding: 0.85rem 1rem; border: 1px solid var(--border-color); border-radius: 12px; font-family: Inter; min-width: 160px; background: var(--input-bg); color: var(--text-main); font-size: 14px; outline: none; cursor: pointer;">
+    <select id="statusFilter" style="padding: 0.85rem 1rem; border: 1px solid var(--border-color); border-radius: 12px; font-family: Inter; min-width: 0; flex: 1 1 140px; max-width: 100%; background: var(--input-bg); color: var(--text-main); font-size: 14px; outline: none; cursor: pointer;">
         <option value="">All Statuses</option>
         <option value="pending">Pending</option>
         <option value="in_progress">In Progress</option>

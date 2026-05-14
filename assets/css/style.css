@@ -720,6 +720,8 @@ a {
     align-items: center;
     justify-content: space-between;
     padding: 14px 28px;
+    gap: 12px;
+    flex-wrap: nowrap;
     background: var(--bg-card);
     border-bottom: 1px solid var(--border-color);
     position: sticky;
@@ -731,9 +733,25 @@ a {
 .main-topbar h1,
 .main-topbar .page-title {
     font-family: 'Sora', sans-serif;
-    font-size: 17px;
+    font-size: clamp(14px, 3.2vw, 17px);
     font-weight: 700;
     color: var(--text-main);
+    margin: 0;
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.25;
+}
+
+.topbar-left-cluster {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 /* Hamburger — visible only mobile */
@@ -1642,6 +1660,17 @@ a {
 
 /* Specific Component Overrides */
 @media (max-width: 900px) {
+    .main-topbar {
+        flex-wrap: wrap;
+        padding: 10px 14px;
+        row-gap: 8px;
+    }
+
+    .main-topbar .topbar-right {
+        flex: 0 0 auto;
+        margin-left: auto;
+    }
+
     .sidebar {
         transform: translateX(-100%);
         width: 280px;
@@ -1668,6 +1697,17 @@ a {
 @media (max-width: 768px) {
     .stats-grid {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .report-form-grid-3,
+    .report-form-grid-2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .section-header.flex-responsive h2,
+    .incidents-section .section-header h2 {
+        word-break: break-word;
+        overflow-wrap: anywhere;
     }
 
     .detail-grid {

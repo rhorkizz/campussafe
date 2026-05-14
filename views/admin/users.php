@@ -66,10 +66,10 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CIRS - Manage Users</title>
-    <link rel="stylesheet" href="../../assets/css/style.css?v=18">
+    <link rel="stylesheet" href="<?php echo htmlspecialchars(app_url('assets/css/style.css')); ?>?v=19">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../../assets/js/main.js?v=18" defer></script>
+    <script src="<?php echo htmlspecialchars(app_url('assets/js/main.js')); ?>?v=19" defer></script>
 </head>
 <body data-theme="light">
     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
@@ -167,7 +167,7 @@ try {
                             </button>
                         </form>
                         <div style="margin-top: 1.5rem; text-align: center;">
-                            <a href="../../assets/sample_users.csv" download style="color: var(--primary); font-size: 13px; font-weight: 600; text-decoration: none;">
+                            <a href="<?php echo htmlspecialchars(app_url('assets/sample_users.csv')); ?>" download style="color: var(--primary); font-size: 13px; font-weight: 600; text-decoration: none;">
                                 <i class="fas fa-download"></i> Download Sample CSV
                             </a>
                         </div>
