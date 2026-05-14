@@ -2,27 +2,36 @@
 /**
  * Database Configuration File
  * Handles PDO connection to MySQL database
+ *
+ * On shared hosting, set DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS (and optionally BASE_URL)
+ * in the host panel or .htaccess SetEnv — avoid committing production secrets.
  */
 
-// Database configuration
-define('DB_HOST', 'localhost');
-define('DB_PORT', '3306');  // MySQL default. WAMP MariaDB uses 3307 – use that if you use MariaDB in phpMyAdmin
-define('DB_NAME', 'campus_incident_system');
-define('DB_USER', 'root');
-define('DB_PASS', '');  // Set your MySQL/MariaDB root password here. Leave '' only if root has no password. "Access denied (using password: NO)" = you need to set this.
+function _dbEnv(string $key, string $default): string {
+    $v = getenv($key);
+    return ($v !== false && $v !== '') ? $v : $default;
+}
+
+define('DB_HOST', _dbEnv('DB_HOST', 'localhost'));
+define('DB_PORT', _dbEnv('DB_PORT', '3306'));  // WAMP MariaDB often uses 3307 locally
+define('DB_NAME', _dbEnv('DB_NAME', 'campus_incident_system'));
+define('DB_USER', _dbEnv('DB_USER', 'root'));
+define('DB_PASS', _dbEnv('DB_PASS', ''));
 define('DB_CHARSET', 'utf8mb4');
 
-// Base URL for absolute redirects (no trailing slash).
-// This is derived automatically from the server path so it works from any sub-directory.
 if (!defined('BASE_URL')) {
-    $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
-    // Walk up to find the CampusSafe project root (the folder containing index.php)
-    $projectRoot = rtrim(str_replace(
-        ['/views/admin', '/views/officer', '/views/student', '/views', '/handlers', '/controllers', '/models', '/helpers', '/config'],
-        '',
-        rtrim($scriptDir, '/')
-    ), '/');
-    define('BASE_URL', $projectRoot);
+    $baseEnv = getenv('BASE_URL');
+    if ($baseEnv !== false && $baseEnv !== '') {
+        define('BASE_URL', rtrim($baseEnv, '/'));
+    } else {
+        $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
+        $projectRoot = rtrim(str_replace(
+            ['/views/admin', '/views/officer', '/views/student', '/views', '/handlers', '/controllers', '/models', '/helpers', '/config'],
+            '',
+            rtrim($scriptDir, '/')
+        ), '/');
+        define('BASE_URL', $projectRoot);
+    }
 }
 
 // When true: login is disabled; "Enter without database (demo)" lets you explore the app. Set to false when DB is ready.
